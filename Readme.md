@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Мария Панасенко](https://up.htmlacademy.ru/ecmascript/16/user/192347).
-* Наставник: `Неизвестно`.
+* Наставник: [Михаил Кислый](https://htmlacademy.ru/profile/smart-grizzly).
 
 ---
 
