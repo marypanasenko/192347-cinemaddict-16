@@ -1,5 +1,6 @@
+import {FILM_COUNT} from '../main.js';
 export const createFooterStatisticTemplate = () => (
   `<section class="footer__statistics">
-    <p>130 291 movies inside</p>
+    <p>${FILM_COUNT} movies inside</p>
   </section>`
 );
