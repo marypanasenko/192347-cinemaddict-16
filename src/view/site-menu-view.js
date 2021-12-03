@@ -2,8 +2,8 @@ const createFilterItemTemplate = (filter) => {
   const {name, count} = filter;
   return (
     `<a href="#${name}"
-    className="main-navigation__item">${name}
-    <span className="main-navigation__item-count">${count}
+    class="main-navigation__item">${name}
+    <span class="main-navigation__item-count">${count}
     </span></a
     >`
   );

@@ -9,11 +9,11 @@ import {generateFilmCard} from './mock/film-card.js';
 import {createPopupTemplate} from './view/popup-view.js';
 import {createPopupComment} from './view/comment-view.js';
 import {generateFilter} from './mock/filter.js';
-import {getRandomInteger} from './mock/film-card.js';
+import {createFilmsEmptyListTemplate} from './view/film-empty-list-view.js';
 
-export const FILM_COUNT = 16;
+// replace to constants
+export const FILM_COUNT = 22;
 const CARD_COUNT = 5;
-export const COMMENT_COUNT = getRandomInteger(0, 5);
 
 export const RenderPosition = {
   BEFOREBEGIN: 'beforebegin',
@@ -21,7 +21,7 @@ export const RenderPosition = {
   BEFOREEND: 'beforeend',
   AFTEREND: 'afterend',
 };
-
+// replace to util
 export const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
@@ -29,7 +29,10 @@ export const renderTemplate = (container, template, place) => {
 const filmCard = Array.from({length: FILM_COUNT}, generateFilmCard);
 const filter = generateFilter(filmCard);
 
+// maping filmCard for rendering [0] popup
+const filmCardCopy = filmCard.map((item) => item);
 
+// render header profile and menu templates
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('header');
 const siteHeaderLogoElement = siteHeaderElement.querySelector('.header__logo');
@@ -38,25 +41,27 @@ const siteFooterElement = document.querySelector('footer');
 renderTemplate(siteHeaderLogoElement, createHeaderProfileTemplate(), RenderPosition.AFTEREND);
 renderTemplate(siteMainElement, createSiteMenuTemplate(filter), RenderPosition.AFTERBEGIN);
 
+// render elements of sorting template
 const siteMenuElement = siteMainElement.querySelector('.main-navigation');
 renderTemplate(siteMenuElement, createSortContentTemplate(), RenderPosition.AFTEREND);
+
+// render film container templates
 renderTemplate(siteMainElement, createFilmsContainerTemplate(), RenderPosition.BEFOREEND);
 
+const siteFilmsElement = siteMainElement.querySelector('.films-list');
 const siteFilmsContainerElement = siteMainElement.querySelector('.films-list__container');
 
+// render show more button template
 renderTemplate(siteMainElement, createButtonMoreTemplate(), RenderPosition.BEFOREEND);
+
+// render footer statistic template
 renderTemplate(siteFooterElement,createFooterStatisticTemplate(filmCard), RenderPosition.BEFOREEND);
 
-
-for (let i = 0; i < CARD_COUNT; i++) {
-  renderTemplate(siteFilmsContainerElement, createFilmCardTemplate(filmCard[i]), RenderPosition.AFTERBEGIN);
-}
-filmCard.splice(0,CARD_COUNT);
-
+// add EventListener to button show more
 const cardShowHandler = (evt) => {
   evt.preventDefault();
   if (filmCard.length >= CARD_COUNT) {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < filmCard.length; i++) {
       renderTemplate(siteFilmsContainerElement, createFilmCardTemplate(filmCard[i]), RenderPosition.BEFOREEND);
     }
     filmCard.splice(0,CARD_COUNT);
@@ -72,25 +77,36 @@ const cardShowHandler = (evt) => {
 const showMoreBtn = document.querySelector('.films-list__show-more');
 showMoreBtn.addEventListener('click', cardShowHandler);
 
-// Rendering popup and comments
-
-renderTemplate(siteFooterElement,createPopupTemplate(generateFilmCard()), RenderPosition.AFTEREND);
-
-const siteListComments = document.querySelector('.film-details__comments-list');
-
-for (let i = 0; i < COMMENT_COUNT; i++) {
-  if (COMMENT_COUNT === 0) {
-    break;
+// render filmCards
+if (filmCard.length === 0) {
+  renderTemplate(siteFilmsElement, createFilmsEmptyListTemplate(), RenderPosition.BEFOREEND);
+  document.querySelector('.films-list__show-more').remove();
+} else if (filmCard.length <= CARD_COUNT) {
+  for (let i = 0; i < filmCard.length; i++) {
+    renderTemplate(siteFilmsContainerElement, createFilmCardTemplate(filmCard[i]), RenderPosition.BEFOREEND);
   }
-  renderTemplate(siteListComments, createPopupComment(), RenderPosition.AFTERBEGIN);
+  filmCard.splice(0,filmCard.length);
+  document.querySelector('.films-list__show-more').remove();
+} else if (filmCard.length > CARD_COUNT) {
+  for (let i = 0; i < filmCard.length; i++) {
+    renderTemplate(siteFilmsContainerElement, createFilmCardTemplate(filmCard[i]), RenderPosition.BEFOREEND);
+  }
+  filmCard.splice(0,CARD_COUNT);
+  showMoreBtn.addEventListener('click', cardShowHandler);
 }
-const removePopupHandler = () => {
-  document.querySelector('.film-details').remove();
-};
-const closePopupBtn = document.querySelector('.film-details__close-btn');
-closePopupBtn.addEventListener('click', removePopupHandler);
 
-// const cardFilmLink = document.querySelector('.film-card__link');
-// cardFilmLink.addEventListener('click', renderPopup);
-// console.log(cardFilmLink);
+// render [0] popup, comments and close popup
+if (filmCardCopy.length !== 0) {
+  renderTemplate(siteFooterElement,createPopupTemplate(filmCardCopy[0]), RenderPosition.AFTEREND);
+  const numberOfComments = filmCardCopy[0].numberOfComments;
+  const siteListComments = document.querySelector('.film-details__comments-list');
+  for (let i = 0; i < numberOfComments; i++) {
+    renderTemplate(siteListComments, createPopupComment(filmCardCopy[0]), RenderPosition.AFTERBEGIN);
+  }
+  const removePopupHandler = () => {
+    document.querySelector('.film-details').remove();
+  };
+  const closePopupBtn = document.querySelector('.film-details__close-btn');
+  closePopupBtn.addEventListener('click', removePopupHandler);
+}
 
