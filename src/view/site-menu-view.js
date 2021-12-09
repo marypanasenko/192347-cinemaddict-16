@@ -1,3 +1,5 @@
+import {createElement} from '../render.js';
+
 const createFilterItemTemplate = (filter) => {
   const {name, count} = filter;
   return (
@@ -9,7 +11,7 @@ const createFilterItemTemplate = (filter) => {
   );
 };
 
-export const createSiteMenuTemplate = (filterItems) => {
+const createSiteMenuTemplate = (filterItems) => {
   const filterItemsTemplate = filterItems
     .map((filter, index) => createFilterItemTemplate(filter, index === 0))
     .join('');
@@ -22,3 +24,26 @@ export const createSiteMenuTemplate = (filterItems) => {
   </nav>`;
 };
 
+export default class SiteMenuView {
+  #element = null;
+  #filters = null;
+
+  constructor(filters) {
+    this.#filters = filters;
+  }
+
+  get element() {
+    if(!this.#element) {
+      this.#element = createElement(this.template);
+    }
+    return this.#element;
+  }
+
+  get template() {
+    return createSiteMenuTemplate(this.#filters);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}
