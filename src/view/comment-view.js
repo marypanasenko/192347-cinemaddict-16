@@ -16,7 +16,7 @@ const createPopupComment = () => (
   </li>`
 );
 
-export default class PopupCommentView {
+export default class CommentView {
   #element = null;
   get element() {
     if(!this.#element) {
