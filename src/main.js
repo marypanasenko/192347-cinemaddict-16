@@ -50,15 +50,27 @@ const renderFilm = (filmListElement, film) => {
 
 
   filmElement.element.querySelector('.film-card__link').addEventListener('click', () => {
+    const activePopup = document.querySelector('.film-details');
+    if (activePopup) {
+      activePopup.remove();
+    }
     const removePopupHandler = () => {
       document.querySelector('.film-details').remove();
       document.body.style.overflow = '';
+    };
+    const onEscKeyDown = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
+        removePopupHandler();
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
     };
     const renderPopupElement = () => {
       render(siteFooterElement, popup.element, RenderPosition.AFTEREND);
       document.body.style.overflow = 'hidden';
       const closePopupBtn = popup.element.querySelector('.film-details__close-btn');
       closePopupBtn.addEventListener('click', removePopupHandler);
+      document.addEventListener('keydown', onEscKeyDown);
     };
     renderPopupElement();
     const numberOfComment = film.numberOfComments;
