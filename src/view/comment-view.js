@@ -1,4 +1,6 @@
-export const createPopupComment = () => (
+import {createElement} from '../render';
+
+const createPopupComment = () => (
   `<li className="film-details__comment">
      <span className="film-details__comment-emoji">
         <img src="./images/emoji/sleeping.png" width="55" height="55" alt="emoji-sleeping">
@@ -13,3 +15,21 @@ export const createPopupComment = () => (
     </div>
   </li>`
 );
+
+export default class CommentView {
+  #element = null;
+  get element() {
+    if(!this.#element) {
+      this.#element = createElement(this.template);
+    }
+    return this.#element;
+  }
+
+  get template() {
+    return createPopupComment();
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

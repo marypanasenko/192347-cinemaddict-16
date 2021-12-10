@@ -1,4 +1,6 @@
-export const createFilmCardTemplate = (filmCard) => {
+import {createElement} from '../render.js';
+
+const createFilmCardTemplate = (filmCard) => {
   const {shortDescription, numberOfComments, film, watchlist, history, favorites} = filmCard;
   const watchlistClassName = watchlist
     ? 'film-card__controls-item--active'
@@ -29,3 +31,27 @@ export const createFilmCardTemplate = (filmCard) => {
     </div>
   </article>`;
 };
+
+export default class FilmCardView {
+  #element = null;
+  #film = null;
+
+  constructor(film) {
+    this.#film = film;
+  }
+
+  get element() {
+    if(!this.#element) {
+      this.#element = createElement(this.template);
+    }
+    return this.#element;
+  }
+
+  get template() {
+    return createFilmCardTemplate(this.#film);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

@@ -1,4 +1,6 @@
-export const createPopupTemplate = (filmCard) => {
+import {createElement} from '../render';
+
+const createPopupTemplate = (filmCard) => {
   const {fullDescription, numberOfComments, film} = filmCard;
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -115,3 +117,26 @@ export const createPopupTemplate = (filmCard) => {
 </section>`;
 };
 
+export default class PopupView {
+  #element = null;
+  #film = null;
+
+  constructor(film) {
+    this.#film = film;
+  }
+
+  get element() {
+    if(!this.#element) {
+      this.#element = createElement(this.template);
+    }
+    return this.#element;
+  }
+
+  get template() {
+    return createPopupTemplate(this.#film);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}
