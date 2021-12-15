@@ -1,4 +1,4 @@
-import {createElement} from '../render';
+import AbstractView from './abstract-view.js';
 
 const createPopupComment = () => (
   `<li className="film-details__comment">
@@ -16,20 +16,8 @@ const createPopupComment = () => (
   </li>`
 );
 
-export default class CommentView {
-  #element = null;
-  get element() {
-    if(!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
+export default class CommentView extends AbstractView {
   get template() {
     return createPopupComment();
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
