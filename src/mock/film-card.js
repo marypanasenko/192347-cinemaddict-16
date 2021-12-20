@@ -1,4 +1,5 @@
 import {FILM_COUNT} from '../main.js';
+import {nanoid} from 'nanoid';
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -89,13 +90,14 @@ export const generateFilmCard = () => {
   const fullDescription = generateDescription();
   const shortDescription = fullDescription.toString().substr(1, 139).concat(' ...');
   return {
+    id: nanoid(),
     filmCount: FILM_COUNT,
     shortDescription,
     fullDescription,
     numberOfComments,
-    watchlist: Boolean(getRandomInteger(0, 1)),
-    history: Boolean(getRandomInteger(0, 1)),
-    favorite: Boolean(getRandomInteger(0, 1)),
+    toWatchlist: Boolean(getRandomInteger(0, 1)),
+    isWatched: Boolean(getRandomInteger(0, 1)),
+    isFavorite: Boolean(getRandomInteger(0, 1)),
     film: generateInfoFilm()
   };
 };
