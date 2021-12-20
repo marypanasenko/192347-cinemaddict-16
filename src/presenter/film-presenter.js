@@ -29,7 +29,7 @@ export default class FilmPresenter {
   init = (film) => {
     this.#film = film;
     this.#numberOfComments = film.numberOfComments;
-    this.#renderFilm(film);
+    this.#renderFilm();
     this.#addEventHandlers();
   }
 
@@ -59,6 +59,10 @@ export default class FilmPresenter {
     this.#filmComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#filmComponent.setWatchedClickHandler(this.#handleWatchedClick);
     this.#filmComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
+
+    // this.#popupComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+    // this.#popupComponent.setWatchedClickHandler(this.#handleWatchedClick);
+    // this.#popupComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
   }
 
   destroy = () => {
@@ -81,6 +85,7 @@ export default class FilmPresenter {
     this.#changeMode();
     const siteFooterElement = document.querySelector('footer');
     render(siteFooterElement, this.#popupComponent, RenderPosition.AFTEREND);
+
     document.body.style.overflow = 'hidden';
     this.#renderPopupComments();
     this.#mode = Mode.POPUP;
