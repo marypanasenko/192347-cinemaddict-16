@@ -4,4 +4,4 @@ export const SortType = {
   RATING: 'rating',
 };
 
-export const FILM_COUNT = 0;
+export const FILM_COUNT = 16;
