@@ -1,9 +1,12 @@
 import FilmsListContainerView from '../view/films-list-container-view.js';
 import FilmsEmptyListView from '../view/film-empty-list-view.js';
-import {render, RenderPosition, remove} from '../render.js';
+import {render, RenderPosition, remove} from '../util/render.js';
 import ButtonMoreView from '../view/button-more-view.js';
 import FilmPresenter from './film-presenter.js';
 import {siteMainElement} from '../main.js';
+import SortContentView from '../view/sort-content-view';
+import {sortByDate, sortByRating} from '../util/sort';
+import {SortType} from '../const';
 
 const CARD_COUNT = 5;
 
@@ -23,12 +26,15 @@ export const updateItem = (items, update) => {
 
 export default class FilmsListPresenter {
   #filmsContainer = null;
+  #sortComponent = new SortContentView();
   #filmsListComponent = new FilmsListContainerView();
   #loadButtonMoreComponent = new ButtonMoreView();
 
   #boardFilms = [];
   #renderedFilmCount = CARD_COUNT;
   #filmPresenter = new Map();
+  #currentSortType = SortType.DEFAULT;
+  #sourcedBoardFilms = [];
 
   constructor(filmsContainer) {
     this.#filmsContainer = filmsContainer;
@@ -37,6 +43,7 @@ export default class FilmsListPresenter {
 
   init = (boardFilms) => {
     this.#boardFilms = [...boardFilms];
+    this.#sourcedBoardFilms = [...boardFilms];
     render(this.#filmsContainer, this.#filmsListComponent, RenderPosition.BEFOREEND);
 
     this.#renderBoard();
@@ -55,6 +62,42 @@ export default class FilmsListPresenter {
     const filmPresenter = new FilmPresenter(this.#filmsListComponent, this.#handleFilmChange, this.#handleModeChange);
     filmPresenter.init(film);
     this.#filmPresenter.set(film.id, filmPresenter);
+  }
+
+  #sortFilms = (sortType) => {
+    // 2. Этот исходный массив задач необходим,
+    // потому что для сортировки мы будем мутировать
+    // массив в свойстве _boardTasks
+    switch (sortType) {
+      case SortType.DATE:
+        this.#boardFilms.sort(sortByDate);
+        break;
+      case SortType.RATING:
+        this.#boardFilms.sort(sortByRating);
+        break;
+      default:
+        // 3. А когда пользователь захочет "вернуть всё, как было",
+        // мы просто запишем в _boardTasks исходный массив
+        this.#boardFilms = [...this.#sourcedBoardFilms];
+    }
+
+    this.#currentSortType = sortType;
+  }
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#sortFilms(sortType);
+    this.#clearFilmList();
+    this.#renderFilmList();
+  }
+
+  #renderSort = () => {
+    const siteMenuElement = siteMainElement.querySelector('.main-navigation');
+    render(siteMenuElement, this.#sortComponent, RenderPosition.AFTEREND);
+    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   }
 
   #renderFilms = (from, to) => {
@@ -98,11 +141,13 @@ export default class FilmsListPresenter {
   };
 
   #renderBoard = () => {
+    this.#renderSort();
+    this.#renderFilmList();
     if (this.#boardFilms.length === 0) {
       this.#renderNoTasks();
       this.#loadButtonMoreComponent.element.remove();
+      this.#sortComponent.element.remove();
     }
-    this.#renderFilmList();
   }
 }
 

@@ -1,6 +1,6 @@
 import FilmCardView from '../view/film-card-view';
 import PopupView from '../view/popup-view';
-import {remove, render, RenderPosition, replace} from '../render';
+import {remove, render, RenderPosition, replace} from '../util/render';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
