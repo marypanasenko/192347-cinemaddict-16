@@ -12,7 +12,6 @@ const createPopupTemplate = (filmCard) => {
   const favoriteClassName = isFavorite
     ? 'film-details__control-button--favorite film-details__control-button--active'
     : 'film-details__control-button--favorite';
-  console.log(comments.length);
   const displayComments = comments.map((comment) => createPopupComment(comment)).join('');
 
   return `<section class="film-details">
