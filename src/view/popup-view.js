@@ -1,16 +1,20 @@
 import AbstractView from './abstract-view.js';
+import {createPopupComment} from './comment-view.js';
 
 const createPopupTemplate = (filmCard) => {
-  const {fullDescription, numberOfComments, film, toWatchlist, isWatched, isFavorite} = filmCard;
+  const {fullDescription, film, toWatchlist, isWatched, isFavorite, comments} = filmCard;
   const watchlistClassName = toWatchlist
-    ? 'film-details__control-button--watchlist film-card__control-button--active'
+    ? 'film-details__control-button--watchlist film-details__control-button--active'
     : 'film-details__control-button--watchlist';
   const watchedClassName = isWatched
-    ? 'film-details__control-button--watched film-card__control-button--active'
+    ? 'film-details__control-button--watched film-details__control-button--active'
     : 'film-details__control-button--watched';
   const favoriteClassName = isFavorite
-    ? 'film-details__control-button--favorite film-card__control-button--active'
+    ? 'film-details__control-button--favorite film-details__control-button--active'
     : 'film-details__control-button--favorite';
+  console.log(comments.length);
+  const displayComments = comments.map((comment) => createPopupComment(comment)).join('');
+
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
@@ -85,10 +89,10 @@ const createPopupTemplate = (filmCard) => {
 
     <div class="film-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${numberOfComments}</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
-
+            ${displayComments}
         </ul>
 
         <div class="film-details__new-comment">
@@ -143,8 +147,8 @@ export default class PopupView extends AbstractView {
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#popupCloseHandler);
   }
 
-  setWatchListClickHandler = (callback) => {
-    this._callback.watchListClick = callback;
+  setWatchlistClickHandler = (callback) => {
+    this._callback.watchlistClick = callback;
     this.element.querySelector('.film-details__control-button--watchlist').addEventListener('click', this.#watchlistClickHandler);
   };
 

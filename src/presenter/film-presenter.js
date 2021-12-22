@@ -17,6 +17,7 @@ export default class FilmPresenter {
   #numberOfComments = null;
   #changeData = null;
   #changeMode = null;
+  #comments = null;
 
   #mode = Mode.DEFAULT
 
@@ -28,7 +29,6 @@ export default class FilmPresenter {
 
   init = (film) => {
     this.#film = film;
-    this.#numberOfComments = film.numberOfComments;
     this.#renderFilm();
     this.#addEventHandlers();
   }
@@ -60,9 +60,10 @@ export default class FilmPresenter {
     this.#filmComponent.setWatchedClickHandler(this.#handleWatchedClick);
     this.#filmComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
 
-    // this.#popupComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
-    // this.#popupComponent.setWatchedClickHandler(this.#handleWatchedClick);
-    // this.#popupComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
+    this.#popupComponent.setPopupCloseHandler(this.#handlePopupCLose);
+    this.#popupComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+    this.#popupComponent.setWatchedClickHandler(this.#handleWatchedClick);
+    this.#popupComponent.setWatchlistClickHandler(this.#handleWatchlistClick);
   }
 
   destroy = () => {
@@ -72,13 +73,14 @@ export default class FilmPresenter {
 
   resetView = () => {
     if (this.#mode !== Mode.DEFAULT) {
-      this.#removePopupHandler();
+      this.#popupComponent.element.remove();
+      this.#mode = Mode.DEFAULT;
     }
   }
 
   #handlePopupClick = () => {
     this.#renderPopupElement();
-    this.#popupComponent.setPopupCloseHandler(this.#handlePopupCLose);
+
   };
 
   #renderPopupElement = () => {
@@ -87,19 +89,7 @@ export default class FilmPresenter {
     render(siteFooterElement, this.#popupComponent, RenderPosition.AFTEREND);
 
     document.body.style.overflow = 'hidden';
-    this.#renderPopupComments();
     this.#mode = Mode.POPUP;
-  };
-
-  #renderPopupComments = () => {
-    const siteListComments = document.querySelector('.film-details__comments-list');
-    document.addEventListener('keydown', this.#onEscKeyDown);
-
-
-    for (let i = 0; i < this.#numberOfComments; i++) {
-      this.#commentComponent = new CommentView();
-      render(siteListComments, this.#commentComponent, RenderPosition.AFTERBEGIN);
-    }
   };
 
   #onEscKeyDown = (evt) => {

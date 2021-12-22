@@ -85,8 +85,39 @@ const generateInfoFilm = () => {
   return films[randomIndex];
 };
 
+const generateComment = () => {
+  const commentList = [
+    {
+      id: nanoid(),
+      emoji: 'smile',
+      text: '42wqeqwe42',
+      author: 'Max OReilly',
+      day: '12.12'
+    },
+    {
+      id: nanoid(),
+      emoji: 'sleeping',
+      text: '42wqeqwe42',
+      author: 'Ilya Oliver',
+      day: '12.12'
+    },
+    {
+      id: nanoid(),
+      emoji: 'puke',
+      text: '42sdfag42',
+      author: 'Ilya OReilly',
+      day: '12.12'
+    }];
+  const randomIndex = getRandomInteger(0, commentList.length - 1);
+  return commentList[randomIndex];
+};
+
+const getRandomComments = (min = 0, max = 5) => {
+  const randomIndex = getRandomInteger(min, max);
+  return Array.from({ length: randomIndex }, generateComment);
+};
+
 export const generateFilmCard = () => {
-  const numberOfComments = getRandomInteger(0, 5);
   const fullDescription = generateDescription();
   const shortDescription = fullDescription.toString().substr(1, 139).concat(' ...');
   return {
@@ -94,10 +125,10 @@ export const generateFilmCard = () => {
     filmCount: FILM_COUNT,
     shortDescription,
     fullDescription,
-    numberOfComments,
     toWatchlist: Boolean(getRandomInteger(0, 1)),
     isWatched: Boolean(getRandomInteger(0, 1)),
     isFavorite: Boolean(getRandomInteger(0, 1)),
-    film: generateInfoFilm()
+    film: generateInfoFilm(),
+    comments: getRandomComments()
   };
 };

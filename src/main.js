@@ -1,4 +1,3 @@
-import FilmsListContainerView from './view/films-list-container-view.js';
 import FooterStatisticsView from './view/footer-statistics-view.js';
 import {generateFilmCard} from './mock/film-card.js';
 import {generateFilter} from './mock/filter.js';
