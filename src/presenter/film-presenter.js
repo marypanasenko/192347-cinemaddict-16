@@ -1,6 +1,7 @@
-import FilmCardView from '../view/film-card-view';
-import PopupView from '../view/popup-view';
-import {remove, render, RenderPosition, replace} from '../render';
+import FilmCardView from '../view/film-card-view.js';
+import PopupView from '../view/popup-view.js';
+import {remove, render, RenderPosition, replace} from '../util/render.js';
+import {EscapeType} from '../util/enum.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -13,10 +14,8 @@ export default class FilmPresenter {
   #filmComponent = null;
   #popupComponent = null;
   #commentComponent = null;
-  #numberOfComments = null;
   #changeData = null;
   #changeMode = null;
-  #comments = null;
 
   #mode = Mode.DEFAULT
 
@@ -86,13 +85,13 @@ export default class FilmPresenter {
     this.#changeMode();
     const siteFooterElement = document.querySelector('footer');
     render(siteFooterElement, this.#popupComponent, RenderPosition.AFTEREND);
-
     document.body.style.overflow = 'hidden';
     this.#mode = Mode.POPUP;
+    document.addEventListener('keydown', this.#onEscKeyDown);
   };
 
   #onEscKeyDown = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (evt.key === EscapeType.ESCAPE || evt.key === EscapeType.ESC) {
       evt.preventDefault();
       this.#removePopupHandler();
       document.removeEventListener('keydown', this.#onEscKeyDown);

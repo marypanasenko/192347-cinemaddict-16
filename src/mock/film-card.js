@@ -1,5 +1,5 @@
-import {FILM_COUNT} from '../main.js';
 import {nanoid} from 'nanoid';
+import {FILM_COUNT} from '../const';
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
