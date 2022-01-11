@@ -5,3 +5,10 @@ export const SortType = {
 };
 
 export const FILM_COUNT = 16;
+
+export const EMOJIS = [
+  'smile',
+  'sleeping',
+  'puke',
+  'angry'
+];
