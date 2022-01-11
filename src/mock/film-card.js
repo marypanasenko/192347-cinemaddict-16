@@ -112,6 +112,7 @@ const generateComment = () => {
   return commentList[randomIndex];
 };
 
+
 const getRandomComments = (min = 0, max = 5) => {
   const randomIndex = getRandomInteger(min, max);
   return Array.from({ length: randomIndex }, generateComment);
@@ -129,6 +130,6 @@ export const generateFilmCard = () => {
     isWatched: Boolean(getRandomInteger(0, 1)),
     isFavorite: Boolean(getRandomInteger(0, 1)),
     film: generateInfoFilm(),
-    comments: getRandomComments()
+    comments: getRandomComments(),
   };
 };
