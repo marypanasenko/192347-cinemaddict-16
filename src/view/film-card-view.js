@@ -1,4 +1,5 @@
 import AbstractView from './abstract-view.js';
+import {toTimeFormat, toDateFormat} from '../util/date.js';
 
 const createFilmCardTemplate = (filmCard) => {
   const {shortDescription, comments, film, toWatchlist, isWatched, isFavorite} = filmCard;
@@ -11,13 +12,15 @@ const createFilmCardTemplate = (filmCard) => {
   const favoriteClassName = isFavorite
     ? 'film-card__controls-item--favorite film-card__controls-item--active'
     : 'film-card__controls-item--favorite';
+  const filmDuration = toTimeFormat(film.duration);
+  const filmDate = toDateFormat(film.year);
   return `<article class="film-card">
     <a class="film-card__link">
       <h3 class="film-card__title">${film.title}</h3>
       <p class="film-card__rating">${film.rating}</p>
       <p class="film-card__info">
-        <span class="film-card__year">${film.year}</span>
-        <span class="film-card__duration">${film.duration}</span>
+        <span class="film-card__year">${filmDate}</span>
+        <span class="film-card__duration">${filmDuration}</span>
         <span class="film-card__genre">${film.genre}</span>
       </p>
       <img src="./images/posters/${film.image}" alt="" class="film-card__poster">
