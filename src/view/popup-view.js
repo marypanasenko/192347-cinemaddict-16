@@ -1,5 +1,6 @@
 import {EMOJIS} from '../const';
 import SmartView from './smart-view';
+import {toTimeFormat, toDateFormat, toDateAndTimeFormat} from '../util/date.js';
 
 
 const createPopupTemplate = (filmCard) => {
@@ -16,6 +17,8 @@ const createPopupTemplate = (filmCard) => {
 
   const createPopupComment = (comment) => {
     const {emoji, text, author, day} = comment;
+    const commentDateAndTime = toDateAndTimeFormat(day);
+
     return `<li className="film-details__comment">
      <span className="film-details__comment-emoji">
         <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-sleeping">
@@ -24,7 +27,7 @@ const createPopupTemplate = (filmCard) => {
       <p className="film-details__comment-text">${text}</p>
       <p className="film-details__comment-info">
         <span className="film-details__comment-author">${author}</span>
-        <span className="film-details__comment-day">${day}</span>
+        <span className="film-details__comment-day">${commentDateAndTime}</span>
         <button className="film-details__comment-delete">Delete</button>
       </p>
     </div>
@@ -53,6 +56,8 @@ const createPopupTemplate = (filmCard) => {
     </label>`;
   const displayEmojis = EMOJIS.map((emoji) => createEmojiList(emoji)).join('');
 
+  const filmDuration = toTimeFormat(film.duration);
+  const filmDate = toDateFormat(film.year);
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
@@ -93,11 +98,11 @@ const createPopupTemplate = (filmCard) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">30 March 1945</td>
+              <td class="film-details__cell">${filmDate}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${film.duration}</td>
+              <td class="film-details__cell">${filmDuration}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
@@ -146,7 +151,7 @@ const createPopupTemplate = (filmCard) => {
 </section>`;
 };
 
-export class PopupView extends SmartView {
+export default class PopupView extends SmartView {
   constructor(film) {
     super();
     this._data = PopupView.parseFilmToData(film);
