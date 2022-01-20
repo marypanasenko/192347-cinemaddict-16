@@ -60,7 +60,7 @@ const generateInfoFilm = () => {
       title: 'The Great Flamarion',
       image: 'the-great-flamarion.jpg',
       rating: '8.9',
-      year: '1945-03-041T16:22:32.554Z',
+      year: '1964-03-01T18:12:32.554Z',
       duration: '78',
       genre: 'Mystery'
     },

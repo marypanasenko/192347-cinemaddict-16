@@ -2,6 +2,7 @@ import FilmCardView from '../view/film-card-view.js';
 import PopupView from '../view/popup-view.js';
 import {remove, render, RenderPosition, replace} from '../util/render.js';
 import {EscapeType} from '../util/enum.js';
+import {UserAction, UpdateType } from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -110,15 +111,24 @@ export default class FilmPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#film, isFavorite: !this.#film.isFavorite});
-  }
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {...this.#film, isFavorite: !this.#film.isFavorite});
+  };
 
   #handleWatchedClick = () => {
-    this.#changeData({...this.#film, isWatched: !this.#film.isWatched});
-  }
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {...this.#film, isWatched: !this.#film.isWatched});
+  };
 
   #handleWatchlistClick = () => {
-    this.#changeData({...this.#film, toWatchlist: !this.#film.toWatchlist});
-  }
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {...this.#film, toWatchlist: !this.#film.toWatchlist});
+  };
 }
 
