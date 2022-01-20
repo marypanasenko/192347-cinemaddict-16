@@ -1,14 +1,19 @@
 import FooterStatisticsView from './view/footer-statistics-view.js';
 import {generateFilmCard} from './mock/film-card.js';
-import {generateFilter} from './mock/filter.js';
 import HeaderProfileView from './view/header-profile-view.js';
 import {render, RenderPosition} from './util/render.js';
-import SiteMenuView from './view/site-menu-view.js';
-import FilmsListPresenter from './presenter/films-list-presenter';
-import {FILM_COUNT} from './const';
+import FilmsListPresenter from './presenter/films-list-presenter.js';
+import {FILM_COUNT} from './const.js';
+import FilmsModel from './model/films-model.js';
+import FilterModel from './model/filter-model';
+import FilterPresenter from './presenter/filter-presenter';
 
-export const filmCard = Array.from({length: FILM_COUNT}, generateFilmCard);
-const filters = generateFilter(filmCard);
+export const films = Array.from({length: FILM_COUNT}, generateFilmCard);
+
+
+const filmsModel = new FilmsModel();
+filmsModel.films = films;
+const filterModel = new FilterModel();
 
 // render header profile and menu elements
 export const siteMainElement = document.querySelector('.main');
@@ -17,12 +22,12 @@ const siteHeaderLogoElement = siteHeaderElement.querySelector('.header__logo');
 const siteFooterElement = document.querySelector('footer');
 
 render(siteHeaderLogoElement, new HeaderProfileView().element, RenderPosition.AFTEREND);
-render(siteMainElement, new SiteMenuView(filters).element, RenderPosition.AFTERBEGIN);
 
-// render footer statistic element
 render(siteFooterElement, new FooterStatisticsView().element, RenderPosition.BEFOREEND);
+const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
+filterPresenter.init();
 
-const filmsPresenter = new FilmsListPresenter(siteMainElement);
-filmsPresenter.init(filmCard);
+const filmsPresenter = new FilmsListPresenter(siteMainElement, filmsModel, filterModel);
+filmsPresenter.init();
 
 
